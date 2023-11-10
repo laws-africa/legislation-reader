@@ -1,0 +1,11 @@
+<html>
+<head>
+  <title>{{ expression.title }}</title>
+</head>
+<body>
+  <a href="{% url 'home' %}">Home</a>
+
+  <h1>{{ expression.title }}</h1>
+
+  <div>{{ expression.content|safe }}</div>
+</body>
