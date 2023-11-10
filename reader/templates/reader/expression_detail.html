@@ -33,6 +33,8 @@
     </aside>
 
     <div style="flex: 3">
+      <la-decorate-terms popup-definitions link-terms></la-decorate-terms>
+      <la-decorate-internal-refs popups flag></la-decorate-internal-refs>
       <!-- use la-akoma-ntoso law widget to apply styles -->
       <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
         {{ expression.content|safe }}
