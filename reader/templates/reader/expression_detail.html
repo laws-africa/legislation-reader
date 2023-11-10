@@ -7,5 +7,18 @@
 
   <h1>{{ expression.title }}</h1>
 
+  {% if siblings %}
+    <h4>Other versions</h4>
+    <ul>
+      {% for sibling in siblings %}
+        <li>
+          <a href="{% url 'expression' sibling.frbr_uri %}">
+            {{ sibling.date|date:"j E Y" }} ({{ sibling.language_code }})
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
   <div>{{ expression.content|safe }}</div>
 </body>
