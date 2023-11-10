@@ -25,8 +25,18 @@
     </ul>
   {% endif %}
 
-  <!-- use la-akoma-ntoso law widget to apply styles -->
-  <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
-    {{ expression.content|safe }}
-  </la-akoma-ntoso>
+  <div style="display: flex">
+    <aside style="flex: 1">
+      <la-table-of-contents-controller
+        items="{{ expression.toc_json.toc }}"
+      ></la-table-of-contents-controller>
+    </aside>
+
+    <div style="flex: 3">
+      <!-- use la-akoma-ntoso law widget to apply styles -->
+      <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
+        {{ expression.content|safe }}
+      </la-akoma-ntoso>
+    </div>
+  </div>
 </body>
