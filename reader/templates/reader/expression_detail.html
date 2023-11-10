@@ -1,6 +1,11 @@
 <html>
 <head>
   <title>{{ expression.title }}</title>
+  <!-- add the law widgets javascript -->
+  <script
+    type="module"
+    src="https://cdn.jsdelivr.net/npm/@lawsafrica/law-widgets@latest/dist/lawwidgets/lawwidgets.esm.js"
+  ></script>
 </head>
 <body>
   <a href="{% url 'home' %}">Home</a>
@@ -20,5 +25,8 @@
     </ul>
   {% endif %}
 
-  <div>{{ expression.content|safe }}</div>
+  <!-- use la-akoma-ntoso law widget to apply styles -->
+  <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
+    {{ expression.content|safe }}
+  </la-akoma-ntoso>
 </body>
