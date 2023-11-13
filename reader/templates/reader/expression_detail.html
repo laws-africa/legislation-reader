@@ -29,16 +29,50 @@
     <aside style="flex: 1">
       <la-table-of-contents-controller
         items="{{ toc_json }}"
+        style="position: sticky; top: 0; max-height: 100vh; overflow-y: auto;"
       ></la-table-of-contents-controller>
     </aside>
 
     <div style="flex: 3">
       <la-decorate-terms popup-definitions link-terms></la-decorate-terms>
       <la-decorate-internal-refs popups flag></la-decorate-internal-refs>
-      <!-- use la-akoma-ntoso law widget to apply styles -->
-      <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
-        {{ expression.content|safe }}
-      </la-akoma-ntoso>
+
+      <div class="la-akoma-ntoso-with-gutter">
+        <!-- use la-akoma-ntoso law widget to apply styles -->
+        <la-akoma-ntoso frbr-expression-uri="{{ expression.frbr_uri }}">
+          {{ expression.content|safe }}
+        </la-akoma-ntoso>
+
+        <la-gutter id="gutter"></la-gutter>
+      </div>
     </div>
+
+    <button id="btn-comment" style="position: fixed; top: 10px; right: 10px;">Add comment...</button>
   </div>
+
+  <script>
+    // add a comment on the selected text
+    document.getElementById('btn-comment').addEventListener('click', (e) => {
+      const sel = document.getSelection();
+      if (sel && !sel.isCollapsed) {
+        let node = sel.getRangeAt(0).commonAncestorContainer;
+        // go from a text node to an element
+        if (node.nodeType !== document.ELEMENT_NODE) {
+          node = node.parentElement;
+        }
+        // get the nearest element with an eId
+        node = node.closest('[data-eid]');
+        if (node) {
+          const eId = node.getAttribute('data-eid');
+          const comment = prompt(`What's your comment on this section? (#${eId})`);
+          if (comment) {
+            item = document.createElement('la-gutter-item');
+            item.setAttribute('anchor', `#${eId}`);
+            item.innerText = comment;
+            document.getElementById('gutter').appendChild(item);
+          }
+        }
+      }
+    });
+  </script>
 </body>
