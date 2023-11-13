@@ -57,5 +57,6 @@ class Command(BaseCommand):
     def call_url_with_token(self, url):
         self.stdout.write(self.style.NOTICE(f'Making a call to: {url}'))
         resp = requests.get(url, headers={'Authorization': f'token {self.api_token}'})
+        resp.raise_for_status()
         self.stdout.write(self.style.NOTICE(f'    Response: {resp.status_code}'))
         return resp

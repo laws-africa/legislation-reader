@@ -1,3 +1,5 @@
+import json
+
 from django.views.generic import ListView, DetailView
 from .models import Work, Expression
 
@@ -15,4 +17,5 @@ class ExpressionDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         # get all the other expressions on this expression's work
         context['siblings'] = self.object.work.expressions.exclude(frbr_uri=self.object.frbr_uri)
+        context['toc_json'] = json.dumps(self.object.toc_json['toc'])
         return context
