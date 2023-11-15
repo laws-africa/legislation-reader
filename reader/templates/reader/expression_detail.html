@@ -6,6 +6,16 @@
     type="module"
     src="https://cdn.jsdelivr.net/npm/@lawsafrica/law-widgets@latest/dist/lawwidgets/lawwidgets.esm.js"
   ></script>
+  <style>
+    .highlighting {
+      color: lightgrey;
+    }
+
+    .highlighting .highlight {
+      color: black;
+      background-color: palegreen;
+    }
+  </style>
 </head>
 <body>
   <a href="{% url 'home' %}">Home</a>
@@ -52,6 +62,7 @@
     </div>
 
     <button id="btn-comment" style="position: fixed; top: 10px; right: 10px;">Add comment...</button>
+    <select id="select-enrichments" style="position: fixed; top: 40px; right: 10px;">xx</select>
   </div>
 
   <script>
@@ -76,6 +87,69 @@
             document.getElementById('gutter').appendChild(item);
           }
         }
+      }
+    });
+  </script>
+
+  <script>
+    const select = document.getElementById('select-enrichments');
+
+    // add a mutation observer to take action when items are added to the gutter
+    function updateHighlightOptions () {
+      // empty the options
+      while (select.firstChild) select.removeChild(select.firstChild);
+      // add the empty option
+      const option = document.createElement('option');
+      option.innerText = "(off)";
+      option.value = "";
+      select.appendChild(option);
+
+      // unique text of gutter items
+      const items = [...new Set([...document.querySelectorAll('la-gutter-item')].map((item) => item.innerText))];
+      items.sort();
+
+      // add the items as options to the dropdown
+      for (const item of items) {
+        const option = document.createElement('option');
+        option.innerText = item;
+        option.value = item;
+        select.appendChild(option);
+      }
+    }
+
+    const observer = new MutationObserver(() => {
+      window.setTimeout(updateHighlightOptions, 500);
+    });
+    observer.observe(document.getElementById('gutter'), { childList: true });
+    updateHighlightOptions();
+
+    // when the select changes, highlight the provisions that match by adding a class to those provisions
+    select.addEventListener('change', (e) => {
+      const doc = document.getElementsByTagName('la-akoma-ntoso')[0];
+
+      // remove any existing highlights
+      for (const provision of document.querySelectorAll('.highlight')) {
+        provision.classList.remove('highlight');
+      }
+
+      const selected = e.target.value;
+      if (selected) {
+        // turn on highlighting
+        doc.classList.add('highlighting');
+
+        // mark each highlighted element
+        for (const item of document.querySelectorAll('la-gutter-item')) {
+          if (item.innerText === selected) {
+            const anchor = item.getAttribute('anchor');
+            const provision = doc.querySelector(`[id="${anchor.slice(1)}"]`);
+            if (provision) {
+              provision.classList.add('highlight');
+            }
+          }
+        }
+      } else {
+        // turn off highlighting
+        doc.classList.remove('highlighting');
       }
     });
   </script>
