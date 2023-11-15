@@ -9,6 +9,9 @@ class Work(models.Model):
     title = models.CharField(max_length=512)
     metadata = models.JSONField()
 
+    class Meta:
+        ordering = ['title']
+
     def __str__(self):
         return f'{self.title} ({self.frbr_uri})'
 
@@ -41,3 +44,15 @@ class Expression(models.Model):
 
     def __str__(self):
         return f'{self.title} ({self.frbr_uri})'
+
+
+class EnrichmentDataset(models.Model):
+    name = models.CharField(max_length=512, unique=True)
+    taxonomy = models.JSONField()
+
+
+class ProvisionEnrichment(models.Model):
+    dataset = models.ForeignKey(EnrichmentDataset, related_name='enrichments', on_delete=models.CASCADE)
+    work = models.ForeignKey(Work, related_name='enrichments', on_delete=models.CASCADE)
+    provision_id = models.CharField(max_length=512)
+    taxonomy_topic = models.CharField(max_length=1024)

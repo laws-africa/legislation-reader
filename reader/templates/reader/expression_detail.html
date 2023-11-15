@@ -43,7 +43,11 @@
           {{ expression.content|safe }}
         </la-akoma-ntoso>
 
-        <la-gutter id="gutter"></la-gutter>
+        <la-gutter id="gutter">
+          {% for enrichment in expression.work.enrichments.all %}
+            <la-gutter-item anchor="#{{ enrichment.provision_id }}">{{ enrichment.taxonomy_topic }}</la-gutter-item>
+          {% endfor %}
+        </la-gutter>
       </div>
     </div>
 

@@ -20,6 +20,9 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=512)),
                 ('metadata', models.JSONField()),
             ],
+            options={
+                'ordering': ['title'],
+            },
         ),
         migrations.CreateModel(
             name='Expression',
