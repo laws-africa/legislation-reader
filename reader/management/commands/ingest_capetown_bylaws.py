@@ -31,8 +31,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE(f"Creating or updating a Work for {data['frbr_uri']}"))
         work, new = Work.objects.update_or_create(
             frbr_uri=data['frbr_uri'],
-            title=data['title'],
-            metadata=data
+            defaults={
+                'title': data['title'],
+                'metadata': data
+            }
         )
         self.stdout.write(self.style.NOTICE(f'    Work {"created" if new else "updated"}: {work}'))
 
@@ -46,11 +48,13 @@ class Command(BaseCommand):
         expression, new = Expression.objects.update_or_create(
             work=work,
             frbr_uri=data['expression_frbr_uri'],
-            title=data['title'],
-            language_code=data['language'],
-            date=data['expression_date'],
-            content=self.call_url_with_token(f"{data['url']}.html").content.decode('utf-8'),
-            toc_json=self.call_url_with_token(f"{data['url']}/toc.json").json(),
+            defaults={
+                'title': data['title'],
+                'language_code': data['language'],
+                'date': data['expression_date'],
+                'content': self.call_url_with_token(f"{data['url']}.html").content.decode('utf-8'),
+                'toc_json': self.call_url_with_token(f"{data['url']}/toc.json").json(),
+            }
         )
         self.stdout.write(self.style.NOTICE(f'    Expression {"created" if new else "updated"}: {expression}'))
 
