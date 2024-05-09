@@ -13,10 +13,13 @@
 
     .highlighting .highlight {
       color: black;
-      background-color: palegreen;
+      background-color: yellow;
     }
 
     .la-decorate-terms__popup {
+        position: relative;
+    }
+    .la-decorate-internal-refs__popup {
         position: relative;
     }
   </style>
@@ -70,7 +73,6 @@
   </div>
 
   <script>
-    // add a comment on the selected text
     document.getElementById('btn-comment').addEventListener('click', (e) => {
       const sel = document.getSelection();
       if (sel && !sel.isCollapsed) {
@@ -85,7 +87,7 @@
           const eId = node.getAttribute('data-eid');
           const comment = prompt(`What's your comment on this section? (#${eId})`);
           if (comment) {
-            item = document.createElement('la-gutter-item');
+            const item = document.createElement('la-gutter-item');
             item.setAttribute('anchor', `#${eId}`);
             item.innerText = comment;
             document.getElementById('gutter').appendChild(item);
